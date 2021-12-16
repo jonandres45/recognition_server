@@ -3,9 +3,10 @@ const ComputerVisionClient = require('@azure/cognitiveservices-computervision').
 const ApiKeyCredentials = require('@azure/ms-rest-js').ApiKeyCredentials;
 
 exports.sendAndGetDescription = async (req, res) =>{
-    const comp = await getDescription({nombre: "perro"});
-    console.log(comp);
-    res.status(200).send(comp);
+    console.log(req.body);
+    //const comp = await getDescription({nombre: "perro"});
+    //console.log(comp);
+    // res.status(200).send(comp);
 }
 exports.sendAndGetLabels = async (req, res) =>{
     const comp = await getLabels({nombre: "perro"});
