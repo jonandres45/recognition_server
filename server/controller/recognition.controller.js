@@ -3,27 +3,30 @@ const ComputerVisionClient = require('@azure/cognitiveservices-computervision').
 const ApiKeyCredentials = require('@azure/ms-rest-js').ApiKeyCredentials;
 
 exports.sendAndGetDescription = async (req, res) =>{
-    console.log(req.body);
-    //const comp = await getDescription({nombre: "perro"});
+
+//    console.log(req.body);
+    const comp = await getDescription();
+    res.status(200).send("Hola");
     //console.log(comp);
     // res.status(200).send(comp);
 }
 exports.sendAndGetLabels = async (req, res) =>{
-    const comp = await getLabels({nombre: "perro"});
+    const comp = await getLabels();
     console.log(comp);
     res.status(200).send(comp);
 }
 
-async function getDescription (image){
+async function getDescription (){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
-//    console.log('Analyzing URL image to describe...', describeURL.split('/').pop());
-    const caption = (await computerVisionClient.describeImage(image)).captions[0];
+    console.log('Analyzing URL image to describe...');
+    const img = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
+    const caption = (await computerVisionClient.describeImage(img)).captions[0];
     console.log(`This may be ${caption.text} (${caption.confidence.toFixed(2)} confidence)`);
     return caption;
 }
 
-async function getLabels(image){
+async function getLabels(){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
 //    console.log('Analyzing tags in image...', image.split('/').pop());
