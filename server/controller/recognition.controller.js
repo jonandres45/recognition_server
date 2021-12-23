@@ -6,7 +6,7 @@ exports.sendAndGetDescription = async (req, res) =>{
 
 //    console.log(req.body);
     const comp = await getDescription();
-    res.status(200).send("Hola");
+    res.status(200).send(comp);
     //console.log(comp);
     // res.status(200).send(comp);
 }
