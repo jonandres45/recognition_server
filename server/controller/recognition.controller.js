@@ -2,14 +2,20 @@
 const ComputerVisionClient = require('@azure/cognitiveservices-computervision').ComputerVisionClient;
 const ApiKeyCredentials = require('@azure/ms-rest-js').ApiKeyCredentials;
 
+exports.uploadImage = (req, res) =>{
+    res.status(200).send({correct: true});
+}
+
 exports.sendAndGetDescription = async (req, res) =>{
 
 //    console.log(req.body);
     const comp = await getDescription();
-    res.status(200).send(comp);
+    res.status(200).send("Correcto");
     //console.log(comp);
     // res.status(200).send(comp);
 }
+
+
 exports.sendAndGetLabels = async (req, res) =>{
     const comp = await getLabels();
     console.log(comp);

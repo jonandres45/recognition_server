@@ -4,7 +4,8 @@ const RecognitionController = require('../../controller/recognition.controller')
 const upload = require('../../lib/storage');
 
 router
-    .post('/description', upload.single('img'), RecognitionController.sendAndGetDescription)
+    .post('/upload-image', upload.single('img'), RecognitionController.uploadImage)
+    .post('/description', RecognitionController.sendAndGetDescription)
     .get('/labels', RecognitionController.sendAndGetLabels)
     .get('/get-image/:nombre', (req, res)=>{
         let nom = req.params.nombre;
