@@ -7,12 +7,8 @@ exports.uploadImage = (req, res) =>{
 }
 
 exports.sendAndGetDescription = async (req, res) =>{
-
-//    console.log(req.body);
     const comp = await getDescription();
-    res.status(200).send("Correcto");
-    //console.log(comp);
-    // res.status(200).send(comp);
+    res.status(200).send(comp);
 }
 
 
@@ -35,8 +31,9 @@ async function getDescription (){
 async function getLabels(){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
-//    console.log('Analyzing tags in image...', image.split('/').pop());
-    const tags = (await computerVisionClient.analyzeImage(image, { visualFeatures: ['Tags'] })).tags;
+    const img = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
+    console.log('Analyzing tags in image...');
+    const tags = (await computerVisionClient.analyzeImage(img, { visualFeatures: ['Tags'] })).tags;
     console.log(`Tags: ${formatTags(tags)}`);
     return tags;
 }
