@@ -5,7 +5,7 @@ const upload = require('../../lib/storage');
 
 router
     .post('/upload-image', upload.single('img'), RecognitionController.uploadImage)
-    .post('/description', RecognitionController.sendAndGetDescription)
+    .get('/description', RecognitionController.sendAndGetDescription)
     .get('/labels', RecognitionController.sendAndGetLabels)
     .get('/get-image/:nombre', (req, res)=>{
         let nom = req.params.nombre;

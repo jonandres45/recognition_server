@@ -14,7 +14,6 @@ exports.sendAndGetDescription = async (req, res) =>{
 
 exports.sendAndGetLabels = async (req, res) =>{
     const comp = await getLabels();
-    console.log(comp);
     res.status(200).send(comp);
 }
 
