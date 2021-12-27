@@ -91,6 +91,8 @@ async function getObjects(){
  * Detects landmarks or celebrities.
  */
 async function getCelebrities(){
+    //AUTHENTICATE
+    const computerVisionClient = authenticate();
     const domainURLImage = 'https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/ComputerVision/Images/landmark.jpg';
     // Analyze URL image
     console.log('Analyzing image for landmarks...', domainURLImage.split('/').pop());
@@ -98,7 +100,7 @@ async function getCelebrities(){
 
     // Prints domain-specific, recognized objects
     if (domain.length) {
-        console.log(`${domain.length} ${domain.length == 1 ? 'landmark' : 'landmarks'} found:`);
+        console.log(`${domain.length} ${domain.length === 1 ? 'landmark' : 'landmarks'} found:`);
         for (const obj of domain) {
             console.log(`    ${obj.name}`.padEnd(20) + `(${obj.confidence.toFixed(2)} confidence)`.padEnd(20) + `${formatRectDomain(obj.faceRectangle)}`);
         }
