@@ -93,7 +93,7 @@ async function getObjects(){
 async function getCelebrities(){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
-    const domainURLImage = 'https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/ComputerVision/Images/landmark.jpg';
+    const domainURLImage = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
     // Analyze URL image
     console.log('Analyzing image for landmarks...', domainURLImage.split('/').pop());
     const domain = (await computerVisionClient.analyzeImageByDomain('landmarks', domainURLImage)).result.landmarks;
