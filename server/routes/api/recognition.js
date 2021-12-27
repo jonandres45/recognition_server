@@ -7,7 +7,7 @@ router
     .post('/upload-image', upload.single('img'), RecognitionController.uploadImage)
     .get('/description', RecognitionController.sendAndGetDescription)
     .get('/labels', RecognitionController.sendAndGetLabels)
-    .get('/faces', RecognitionController.detectFaces)
+    .get('/faces', RecognitionController.sendAndGetFaces)
     .get('/get-image/:nombre', (req, res)=>{
         let nom = req.params.nombre;
         res.sendFile(  `${nom}.jpg`, {root: 'storage/'});
