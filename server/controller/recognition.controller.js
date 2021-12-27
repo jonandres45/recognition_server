@@ -120,12 +120,12 @@ async function getLandmark(){
 async function contentAdult(){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
-    const domainURLImage = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
+    const adultURLImage = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
     // Function to confirm racy or not
     const isIt = flag => flag ? 'is' : "isn't";
 
     // Analyze URL image
-    console.log('Analyzing image for racy/adult content...', adultURLImage.split('/').pop());
+    console.log('Analyzing image for racy/adult content...');
     const adult = (await computerVisionClient.analyzeImage(adultURLImage, {
         visualFeatures: ['Adult']
     })).adult;
