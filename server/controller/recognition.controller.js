@@ -26,6 +26,11 @@ exports.sendAndGetObjects = async (req, res)=>{
     res.status(200).send(comp);
 }
 
+exports.sendAndGetCelebrities = async (req, res)=>{
+    const comp = await getCelebrities();
+    res.status(200).send(comp);
+}
+
 async function getDescription (){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
@@ -81,6 +86,30 @@ async function getObjects(){
     return objects;
 }
 
+/**
+ * DETECT DOMAIN-SPECIFIC CONTENT
+ * Detects landmarks or celebrities.
+ */
+async function getCelebrities(){
+    const domainURLImage = 'https://raw.githubusercontent.com/Azure-Samples/cognitive-services-sample-data-files/master/ComputerVision/Images/landmark.jpg';
+    // Analyze URL image
+    console.log('Analyzing image for landmarks...', domainURLImage.split('/').pop());
+    const domain = (await computerVisionClient.analyzeImageByDomain('landmarks', domainURLImage)).result.landmarks;
+
+    // Prints domain-specific, recognized objects
+    if (domain.length) {
+        console.log(`${domain.length} ${domain.length == 1 ? 'landmark' : 'landmarks'} found:`);
+        for (const obj of domain) {
+            console.log(`    ${obj.name}`.padEnd(20) + `(${obj.confidence.toFixed(2)} confidence)`.padEnd(20) + `${formatRectDomain(obj.faceRectangle)}`);
+        }
+    } else {
+        console.log('No landmarks found.');
+    }
+
+    return domain;
+
+}
+
 function formatTags(tags) {
     return tags.map(tag => (`${tag.name} (${tag.confidence.toFixed(2)})`)).join(', ');
 }
@@ -95,6 +124,13 @@ function formatRectFaces(rect) {
 function formatRectObjects(rect) {
     return `top=${rect.y}`.padEnd(10) + `left=${rect.x}`.padEnd(10) + `bottom=${rect.y + rect.h}`.padEnd(12)
         + `right=${rect.x + rect.w}`.padEnd(10) + `(${rect.w}x${rect.h})`;
+}
+
+// Formats bounding box
+function formatRectDomain(rect) {
+    if (!rect) return '';
+    return `top=${rect.top}`.padEnd(10) + `left=${rect.left}`.padEnd(10) + `bottom=${rect.top + rect.height}`.padEnd(12) +
+        `right=${rect.left + rect.width}`.padEnd(10) + `(${rect.width}x${rect.height})`;
 }
 
 function authenticate(){
