@@ -17,6 +17,10 @@ exports.sendAndGetLabels = async (req, res) =>{
     res.status(200).send(comp);
 }
 
+exports.sendAndGetFaces = async (req, res) =>{
+    res.status(200).send("bien");
+}
+
 async function getDescription (){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
@@ -35,6 +39,28 @@ async function getLabels(){
     const tags = (await computerVisionClient.analyzeImage(img, { visualFeatures: ['Tags'] })).tags;
     console.log(`Tags: ${formatTags(tags)}`);
     return tags;
+}
+
+async function detectFaces(){
+    //AUTHENTICATE
+    const computerVisionClient = authenticate();
+    const facesImageURL = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
+    console.log('Analyzing faces in image...');
+    // Get the visual feature for 'Faces' only.
+    const faces = (await computerVisionClient.analyzeImage(facesImageURL, { visualFeatures: ['Faces'] })).faces;
+    if (faces.length) {
+        console.log(`${faces.length} face${faces.length === 1 ? '' : 's'} found:`);
+        for (const face of faces) {
+            console.log(`    Gender: ${face.gender}`.padEnd(20)
+                + ` Age: ${face.age}`.padEnd(10) + `at ${formatRectFaces(face.faceRectangle)}`);
+        }
+    } else { console.log('No faces found.'); }
+
+    // Formats the bounding box
+    function formatRectFaces(rect) {
+        return `top=${rect.top}`.padEnd(10) + `left=${rect.left}`.padEnd(10) + `bottom=${rect.top + rect.height}`.padEnd(12)
+            + `right=${rect.left + rect.width}`.padEnd(10) + `(${rect.width}x${rect.height})`;
+    }
 }
 
 function formatTags(tags) {
