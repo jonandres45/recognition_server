@@ -8,6 +8,7 @@ router
     .get('/description', RecognitionController.sendAndGetDescription)
     .get('/labels', RecognitionController.sendAndGetLabels)
     .get('/faces', RecognitionController.sendAndGetFaces)
+    .get('/objects', RecognitionController.sendAndGetObjects)
     .get('/get-image/:nombre', (req, res)=>{
         let nom = req.params.nombre;
         res.sendFile(  `${nom}.jpg`, {root: 'storage/'});

@@ -11,7 +11,6 @@ exports.sendAndGetDescription = async (req, res) =>{
     res.status(200).send(comp);
 }
 
-
 exports.sendAndGetLabels = async (req, res) =>{
     const comp = await getLabels();
     res.status(200).send(comp);
@@ -19,6 +18,11 @@ exports.sendAndGetLabels = async (req, res) =>{
 
 exports.sendAndGetFaces = async (req, res) =>{
     const comp = await getFaces();
+    res.status(200).send(comp);
+}
+
+exports.sendAndGetObjects = async (req, res)=>{
+    const comp = await getObjects();
     res.status(200).send(comp);
 }
 
@@ -60,6 +64,23 @@ async function getFaces(){
     return faces;
 }
 
+async function getObjects(){
+    //AUTHENTICATE
+    const computerVisionClient = authenticate();
+    const objectURL = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
+    // Analyze a URL image
+    console.log('Analyzing objects in image...');
+    const objects = (await computerVisionClient.analyzeImage(objectURL, { visualFeatures: ['Objects'] })).objects;
+    console.log();
+    // Print objects bounding box and confidence
+    if (objects.length) {
+        console.log(`${objects.length} object${objects.length === 1 ? '' : 's'} found:`);
+        for (const obj of objects) { console.log(`    ${obj.object} (${obj.confidence.toFixed(2)}) at ${formatRectObjects(obj.rectangle)}`); }
+    } else { console.log('No objects found.'); }
+
+    return objects;
+}
+
 function formatTags(tags) {
     return tags.map(tag => (`${tag.name} (${tag.confidence.toFixed(2)})`)).join(', ');
 }
@@ -68,6 +89,12 @@ function formatTags(tags) {
 function formatRectFaces(rect) {
     return `top=${rect.top}`.padEnd(10) + `left=${rect.left}`.padEnd(10) + `bottom=${rect.top + rect.height}`.padEnd(12)
         + `right=${rect.left + rect.width}`.padEnd(10) + `(${rect.width}x${rect.height})`;
+}
+
+// Formats the bounding box
+function formatRectObjects(rect) {
+    return `top=${rect.y}`.padEnd(10) + `left=${rect.x}`.padEnd(10) + `bottom=${rect.y + rect.h}`.padEnd(12)
+        + `right=${rect.x + rect.w}`.padEnd(10) + `(${rect.w}x${rect.h})`;
 }
 
 function authenticate(){
