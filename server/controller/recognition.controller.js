@@ -26,8 +26,13 @@ exports.sendAndGetObjects = async (req, res)=>{
     res.status(200).send(comp);
 }
 
-exports.sendAndGetCelebrities = async (req, res)=>{
-    const comp = await getCelebrities();
+exports.sendAndGetLandmark = async (req, res)=>{
+    const comp = await getLandmark();
+    res.status(200).send(comp);
+}
+
+exports.sendAndGetContentAdult = async (req, res)=>{
+    const comp = await contentAdult();
     res.status(200).send(comp);
 }
 
@@ -90,7 +95,7 @@ async function getObjects(){
  * DETECT DOMAIN-SPECIFIC CONTENT
  * Detects landmarks or celebrities.
  */
-async function getCelebrities(){
+async function getLandmark(){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
     const domainURLImage = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
@@ -110,6 +115,24 @@ async function getCelebrities(){
 
     return domain;
 
+}
+
+async function contentAdult(){
+    //AUTHENTICATE
+    const computerVisionClient = authenticate();
+    const domainURLImage = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
+    // Function to confirm racy or not
+    const isIt = flag => flag ? 'is' : "isn't";
+
+    // Analyze URL image
+    console.log('Analyzing image for racy/adult content...', adultURLImage.split('/').pop());
+    const adult = (await computerVisionClient.analyzeImage(adultURLImage, {
+        visualFeatures: ['Adult']
+    })).adult;
+    console.log(`This probably ${isIt(adult.isAdultContent)} adult content (${adult.adultScore.toFixed(4)} score)`);
+    console.log(`This probably ${isIt(adult.isRacyContent)} racy content (${adult.racyScore.toFixed(4)} score)`);
+
+    return adult;
 }
 
 function formatTags(tags) {
