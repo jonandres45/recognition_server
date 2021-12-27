@@ -18,7 +18,8 @@ exports.sendAndGetLabels = async (req, res) =>{
 }
 
 exports.sendAndGetFaces = async (req, res) =>{
-    res.status(200).send("bien");
+    const comp = await getFaces();
+    res.status(200).send(comp);
 }
 
 async function getDescription (){
@@ -41,7 +42,7 @@ async function getLabels(){
     return tags;
 }
 
-async function detectFaces(){
+async function getFaces(){
     //AUTHENTICATE
     const computerVisionClient = authenticate();
     const facesImageURL = 'https://recognition-jonandres.herokuapp.com/api/recognition/get-image/imagen';
@@ -56,15 +57,17 @@ async function detectFaces(){
         }
     } else { console.log('No faces found.'); }
 
-    // Formats the bounding box
-    function formatRectFaces(rect) {
-        return `top=${rect.top}`.padEnd(10) + `left=${rect.left}`.padEnd(10) + `bottom=${rect.top + rect.height}`.padEnd(12)
-            + `right=${rect.left + rect.width}`.padEnd(10) + `(${rect.width}x${rect.height})`;
-    }
+    return faces;
 }
 
 function formatTags(tags) {
     return tags.map(tag => (`${tag.name} (${tag.confidence.toFixed(2)})`)).join(', ');
+}
+
+// Formats the bounding box
+function formatRectFaces(rect) {
+    return `top=${rect.top}`.padEnd(10) + `left=${rect.left}`.padEnd(10) + `bottom=${rect.top + rect.height}`.padEnd(12)
+        + `right=${rect.left + rect.width}`.padEnd(10) + `(${rect.width}x${rect.height})`;
 }
 
 function authenticate(){
