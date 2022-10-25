@@ -160,7 +160,7 @@ function formatRectDomain(rect) {
 
 function authenticate(){
     const key = process.env.KEY_azure;
-    const endpoint = 'https://jonandres-innovaccion1.cognitiveservices.azure.com/';
+    const endpoint = process.env.URL_azure;
 
     return new ComputerVisionClient(
         new ApiKeyCredentials({ inHeader: { 'Ocp-Apim-Subscription-Key': key } }), endpoint);
